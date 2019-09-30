@@ -18,7 +18,7 @@ class AccountApiTest : BaseFunctionalTest() {
     @Test
     fun `should create account`() {
 
-        val createAccountResponse: CreateAccountResponse = Given {
+        val createAccountResponse: AccountResponse = Given {
             body(CreateAccountRequest(BigDecimal.ZERO))
             contentType(ContentType.JSON)
             accept(ContentType.JSON)
@@ -27,7 +27,7 @@ class AccountApiTest : BaseFunctionalTest() {
         } Then {
             statusCode(201)
         } Extract {
-            `as`(CreateAccountResponse::class.java)
+            `as`(AccountResponse::class.java)
         }
 
         accountDao.findOrThrow(createAccountResponse.id).apply {

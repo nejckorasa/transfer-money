@@ -30,7 +30,7 @@ class TransferServiceTest : BaseFunctionalTest() {
                     amount = BigDecimal(20)
                 ),
                 onCompletedTransfer = {
-                    Thread.sleep(4000)
+                    Thread.sleep(5000)
                 })
         }
 

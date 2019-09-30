@@ -37,14 +37,15 @@ class Starter @Inject constructor(
                         .check({ it.balance >= BigDecimal.ZERO }, "Account balance must be positive")
                         .get()
 
-                    val accountId = accountService.create(createAccountRequest)
-                    ctx.json(CreateAccountResponse(accountId))
+                    val account = accountService.create(createAccountRequest)
+                    ctx.json(AccountResponse.fromAccount(account))
                     ctx.status(CREATED_201)
                 }
             }
             path("transfers") {
                 get { ctx ->
-                    ctx.json(transferService.findAll().map { TransferResponse.fromTransfer(it) })
+                    val transfers = transferService.findAll()
+                    ctx.json(transfers.map { TransferResponse.fromTransfer(it) })
                 }
                 post { ctx ->
                     val transferRequest = ctx.bodyValidator<TransferRequest>()
@@ -53,8 +54,9 @@ class Starter @Inject constructor(
                         .check({ it.toAccountId > 0 }, "To account id must be positive")
                         .get()
 
-                    transferService.executeTransfer(transferRequest)
+                    val transfer = transferService.executeTransfer(transferRequest)
                     ctx.status(CREATED_201)
+                    ctx.json(TransferResponse.fromTransfer(transfer))
                 }
             }
         }

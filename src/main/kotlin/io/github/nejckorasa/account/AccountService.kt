@@ -11,8 +11,8 @@ open class AccountService @Inject constructor(private val accountDao: AccountDao
     fun findAll() = accountDao.findAll()
 
     @Transactional
-    open fun create(createAccountRequest: CreateAccountRequest): Long =
-        accountDao.createOrUpdate(createAccountRequest.toAccount()).id!!
+    open fun create(createAccountRequest: CreateAccountRequest): Account =
+        accountDao.createOrUpdate(createAccountRequest.toAccount())
 
     @Transactional
     open fun transfer(from: Account, to: Account, amount: BigDecimal) =

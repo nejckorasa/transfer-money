@@ -19,7 +19,7 @@ open class TransferService @Inject constructor(
 
     fun findAll(): List<Transfer> = transferDao.findAll()
 
-    fun executeTransfer(transferRequest: TransferRequest, onCompletedTransfer: () -> Unit = {}) {
+    fun executeTransfer(transferRequest: TransferRequest, onCompletedTransfer: () -> Unit = {}): Transfer {
         lateinit var exception: Exception
 
         val transfer = createOrUpdate(transferRequest.toTransfer())
@@ -40,6 +40,7 @@ open class TransferService @Inject constructor(
 
         createOrUpdate(transfer.apply { status = transferStatus })
         if (transferStatus == FAILED) throw exception
+        return transfer
     }
 
     private fun createOrUpdate(transfer: Transfer) = tranWrap.inTransaction {
