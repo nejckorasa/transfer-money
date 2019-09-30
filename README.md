@@ -22,15 +22,17 @@ Server starts on: `http://localhost:7000`
 
 To start the server:
 
-`mvn compile exec:java`
+```sh
+mvn compile exec:java
+```
 
 Or build jar and run it:
 
-`mvn package`
+```sh
+mvn package
 
-and 
-
-`java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar`
+java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
 
 ## REST API
 
