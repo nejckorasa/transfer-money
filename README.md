@@ -1,4 +1,7 @@
 # transfer-money
+
+[![Build Status](https://travis-ci.com/nejckorasa/transfer-money.svg?token=pfWZRfNyzeRf4kWWpnbs&branch=master)](https://travis-ci.com/nejckorasa/transfer-money)
+
 Sample app for money transfers between accounts
 
 It supports account creation with initial balance and issuing money transfers between accounts. 
