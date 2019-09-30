@@ -1,4 +1,7 @@
 # transfer-money
+
+[![Build Status](https://travis-ci.com/nejckorasa/transfer-money.svg?token=pfWZRfNyzeRf4kWWpnbs&branch=master)](https://travis-ci.com/nejckorasa/transfer-money)
+
 Sample app for money transfers between accounts
 
 It supports account creation with initial balance and issuing money transfers between accounts. 
@@ -46,12 +49,12 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
   ```json
   [
     {
-        "id": 1,
-        "balance": 200.00
+      "id": 1,
+      "balance": 200.00
     },
     {
-        "id": 2,
-        "balance": 100.00
+      "id": 2,
+      "balance": 100.00
     }
   ]
   ```
@@ -96,31 +99,31 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
   ```json
   [
     {
-        "id": 1,
-        "fromAccountId": 1,
-        "toAccountId": 2,
-        "amount": 50.00,
-        "created": "2019-09-30T20:57:02.15",
-        "status": "COMPLETED"
+      "id": 1,
+      "fromAccountId": 1,
+      "toAccountId": 2,
+      "amount": 50.00,
+      "created": "2019-09-30T20:57:02.15",
+      "status": "COMPLETED"
     },
     {
-        "id": 2,
-        "fromAccountId": 1,
-        "toAccountId": 2,
-        "amount": 50.00,
-        "created": "2019-09-30T20:57:03.102",
-        "status": "FAILED"
+      "id": 2,
+      "fromAccountId": 1,
+      "toAccountId": 2,
+      "amount": 50.00,
+      "created": "2019-09-30T20:57:03.102",
+      "status": "FAILED"
     },
     {
-        "id": 3,
-        "fromAccountId": 1,
-        "toAccountId": 2,
-        "amount": 50.00,
-        "created": "2019-09-30T20:57:05.397",
-        "status": "PENDING"
+      "id": 3,
+      "fromAccountId": 1,
+      "toAccountId": 2,
+      "amount": 50.00,
+      "created": "2019-09-30T20:57:05.397",
+      "status": "PENDING"
     }
-    ]
-    ```
+  ]
+  ```
 
 - `POST /api/transfers`: create transfer
 
@@ -130,8 +133,8 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
 
   ```json
   {
-	"fromAccountId": 1,
-	"toAccountId": 2,
+    "fromAccountId": 1,
+    "toAccountId": 2,
     "amount": 50.0
   }
   ```
@@ -141,11 +144,11 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
   Example response:
   ```json
   {
-        "id": 1,
-        "fromAccountId": 1,
-        "toAccountId": 2,
-        "amount": 50.00,
-        "created": "2019-09-30T20:57:02.15",
-        "status": "COMPLETED"
+    "id": 1,
+    "fromAccountId": 1,
+    "toAccountId": 2,
+    "amount": 50.00,
+    "created": "2019-09-30T20:57:02.15",
+    "status": "COMPLETED"
   }
   ```
