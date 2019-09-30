@@ -6,7 +6,6 @@
 
     <persistence-unit name="money-transfer" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>io.github.nejckorasa.account.Account</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:money-transfer;DB_CLOSE_DELAY=-1"/>
