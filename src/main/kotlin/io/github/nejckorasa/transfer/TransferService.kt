@@ -19,7 +19,7 @@ open class TransferService @Inject constructor(
 
     fun findAll(): List<Transfer> = transferDao.findAll()
 
-    fun executeTransfer(transferRequest: TransferRequest, onCompletedTransfer: () -> Unit = {}): Transfer {
+    fun executeTransfer(transferRequest: TransferRequest): Transfer {
         lateinit var exception: Exception
 
         val transfer = createOrUpdate(transferRequest.toTransfer())
@@ -28,7 +28,6 @@ open class TransferService @Inject constructor(
                 val fromAccount = accountDao.getForUpdate(transfer.fromAccountId)
                 val toAccount = accountDao.getForUpdate(transfer.toAccountId)
                 accountDao.transfer(fromAccount, toAccount, transfer.amount)
-                onCompletedTransfer()
             }
             logger.info("Completed transfer: ${transfer.id} of: ${transfer.amount}")
             COMPLETED
