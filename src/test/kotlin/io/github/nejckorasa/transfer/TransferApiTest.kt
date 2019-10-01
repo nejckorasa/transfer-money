@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.math.BigDecimal
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -43,6 +44,37 @@ class TransferApiTest : BaseFunctionalTest() {
     }
 
     @Test
+    fun `should return all transfers`() {
+
+        val accounts = tranWrap.inTransaction {
+            listOf(
+                accountDao.createOrUpdate(Account(balance = BigDecimal(100))),
+                accountDao.createOrUpdate(Account(balance = BigDecimal(200)))
+            )
+        }
+
+        executeTransfer(fromAccount = accounts[0].id!!, toAccount = accounts[1].id!!, amount = BigDecimal(10))
+        executeTransfer(fromAccount = accounts[0].id!!, toAccount = accounts[1].id!!, amount = BigDecimal(20))
+
+        val transfers = transferDao.findAll()
+        assertEquals(2, transfers.size)
+        transfers[0].apply {
+            assertEquals(accounts[0].id!!, fromAccountId)
+            assertEquals(accounts[1].id!!, toAccountId)
+            assertEquals(TransferStatus.COMPLETED, status)
+            assertEquals(0, BigDecimal(10).compareTo(amount))
+            assertNotNull(created)
+        }
+        transfers[1].apply {
+            assertEquals(accounts[0].id!!, fromAccountId)
+            assertEquals(accounts[1].id!!, toAccountId)
+            assertEquals(TransferStatus.COMPLETED, status)
+            assertEquals(0, BigDecimal(20).compareTo(amount))
+            assertNotNull(created)
+        }
+    }
+
+    @Test
     fun `should get error for insufficient funds`() {
 
         val accounts = tranWrap.inTransaction {
@@ -67,7 +99,7 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(accounts[0].id!!, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertEquals(TransferStatus.FAILED, status)
+            assertNotEquals(TransferStatus.COMPLETED, status)
             assertEquals(0, BigDecimal(50).compareTo(amount))
             assertNotNull(created)
         }
@@ -96,7 +128,7 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(999, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertEquals(TransferStatus.FAILED, status)
+            assertNotEquals(TransferStatus.COMPLETED, status)
             assertEquals(0, BigDecimal(50).compareTo(amount))
             assertNotNull(created)
         }

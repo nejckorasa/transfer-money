@@ -1,7 +1,6 @@
 package io.github.nejckorasa.transfer
 
 import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class TransferRequest(val fromAccountId: Long, val toAccountId: Long, val amount: BigDecimal) {
@@ -9,7 +8,7 @@ data class TransferRequest(val fromAccountId: Long, val toAccountId: Long, val a
         fromAccountId = fromAccountId,
         toAccountId = toAccountId,
         amount = amount,
-        status = TransferStatus.PENDING
+        status = TransferStatus.NEW
     )
 }
 

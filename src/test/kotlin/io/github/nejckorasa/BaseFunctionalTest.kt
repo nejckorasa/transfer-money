@@ -6,7 +6,6 @@ import com.google.inject.persist.PersistService
 import io.github.nejckorasa.account.AccountDao
 import io.github.nejckorasa.dao.TransactionWrapper
 import io.github.nejckorasa.transfer.TransferDao
-import io.github.nejckorasa.transfer.TransferService
 import io.javalin.Javalin
 import io.restassured.RestAssured
 import org.junit.jupiter.api.AfterAll
@@ -23,7 +22,6 @@ open class BaseFunctionalTest(private val port: Int = 7000) {
 
     val accountDao: AccountDao by lazy { injector.getInstance(AccountDao::class.java) }
     val transferDao: TransferDao by lazy { injector.getInstance(TransferDao::class.java) }
-    val transferService: TransferService by lazy { injector.getInstance(TransferService::class.java) }
     val tranWrap: TransactionWrapper by lazy { injector.getInstance(TransactionWrapper::class.java) }
 
     @BeforeAll

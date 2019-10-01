@@ -6,8 +6,6 @@ Sample app for money transfers between accounts
 
 It supports account creation with initial balance and issuing money transfers between accounts. 
 
-For the sake of this sample data is stored in in-memory database. That can be changed if needed.
-
 It is build using:
 
 - [Javalin](https://javalin.io/) web framework with [Guice](https://github.com/google/guice) and [Kotlin](https://kotlinlang.org)
@@ -104,7 +102,7 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
       "toAccountId": 2,
       "amount": 50.00,
       "created": "2019-09-30T20:57:02.15",
-      "status": "COMPLETED"
+      "status": "NEW"
     },
     {
       "id": 2,
@@ -149,6 +147,6 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
     "toAccountId": 2,
     "amount": 50.00,
     "created": "2019-09-30T20:57:02.15",
-    "status": "COMPLETED"
+    "status": "NEW"
   }
   ```

@@ -43,7 +43,7 @@ class TransferApiConcurrentTransfersTest : BaseFunctionalTest() {
         val transfers = transferDao.findAll()
         assertEquals(20, transfers.size)
         assertEquals(15, transfers.filter { it.status == TransferStatus.COMPLETED }.size)
-        assertEquals(5, transfers.filter { it.status == TransferStatus.FAILED }.size)
+        assertEquals(5, transfers.filter { it.status != TransferStatus.COMPLETED }.size)
     }
 
     private fun executeTransfer(
