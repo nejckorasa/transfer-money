@@ -13,15 +13,13 @@ import java.util.concurrent.locks.ReentrantLock
 private const val TRANSFER_LOCK_TIMEOUT_MS = 100L
 private const val TRANSFER_REQUEST_TIMEOUT_MS = 1000L
 
+private val logger: Logger = LoggerFactory.getLogger(ThreadLockingTransferService::class.java)
+
 open class ThreadLockingTransferService @Inject constructor(
     transferDao: TransferDao,
     private val accountDao: AccountDao,
     private val tranWrap: TransactionWrapper
 ) : TransferService(transferDao) {
-
-    companion object {
-        val logger: Logger = LoggerFactory.getLogger(this::class.java.declaringClass)
-    }
 
     private val lock = ReentrantLock()
 

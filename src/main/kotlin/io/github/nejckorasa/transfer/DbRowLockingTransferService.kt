@@ -7,15 +7,13 @@ import io.github.nejckorasa.transfer.TransferStatus.COMPLETED
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+private val logger: Logger = LoggerFactory.getLogger(DbRowLockingTransferService::class.java)
+
 open class DbRowLockingTransferService @Inject constructor(
     transferDao: TransferDao,
     private val accountDao: AccountDao,
     private val tranWrap: TransactionWrapper
 ) : TransferService(transferDao) {
-
-    companion object {
-        val logger: Logger = LoggerFactory.getLogger(this::class.java.name)
-    }
 
     override fun executeTransfer(transferRequest: TransferRequest): Transfer {
         val transfer = createOrUpdate(transferRequest.toTransfer())

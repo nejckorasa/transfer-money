@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "transfers")
-data class Transfer (
+data class Transfer(
 
     @Id
     @Column(name = "transfer_id")
