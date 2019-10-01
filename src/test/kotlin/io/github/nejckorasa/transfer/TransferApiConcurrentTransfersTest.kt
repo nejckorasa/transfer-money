@@ -2,7 +2,6 @@ package io.github.nejckorasa.transfer
 
 import io.github.nejckorasa.BaseFunctionalTest
 import io.github.nejckorasa.account.Account
-import io.github.nejckorasa.runConcurrently
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -11,6 +10,7 @@ import io.restassured.response.ValidatableResponse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.math.BigDecimal
+import kotlin.concurrent.thread
 import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -61,5 +61,11 @@ class TransferApiConcurrentTransfersTest : BaseFunctionalTest() {
         } Then {
             then()
         }
+    }
+
+    private fun runConcurrently(numOfThreads: Int, action: () -> Unit) {
+        1.rangeTo(numOfThreads)
+            .map { thread { action() } }
+            .forEach { it.join() }
     }
 }
