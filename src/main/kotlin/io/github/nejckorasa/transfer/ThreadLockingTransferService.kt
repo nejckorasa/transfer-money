@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
-private const val TRANSFER_LOCK_TIMEOUT = 500L
-private const val TRANSFER_REQUEST_TIMEOUT = 1000L
+private const val TRANSFER_LOCK_TIMEOUT_MS = 100L
+private const val TRANSFER_REQUEST_TIMEOUT_MS = 1000L
 
 open class ThreadLockingTransferService @Inject constructor(
     transferDao: TransferDao,
@@ -20,14 +20,14 @@ open class ThreadLockingTransferService @Inject constructor(
 ) : TransferService(transferDao) {
 
     companion object {
-        val logger: Logger = LoggerFactory.getLogger(this::class.java.name)
+        val logger: Logger = LoggerFactory.getLogger(this::class.java.declaringClass)
     }
 
     private val lock = ReentrantLock()
 
     override fun executeTransfer(transferRequest: TransferRequest): Transfer {
         val transfer = createOrUpdate(transferRequest.toTransfer())
-        val transferSuccess = repeatUntilTrue(atMostTimes = 3, timeoutMs = TRANSFER_REQUEST_TIMEOUT) { index ->
+        val transferSuccess = repeatUntil(timeoutMs = TRANSFER_REQUEST_TIMEOUT_MS) {
             executeTransfer(transfer)
         }
         return createOrUpdate(transfer.apply { status = if (transferSuccess) COMPLETED else FAILED })
@@ -35,7 +35,8 @@ open class ThreadLockingTransferService @Inject constructor(
 
     private fun executeTransfer(transfer: Transfer): Boolean {
         try {
-            if (lock.tryLock(TRANSFER_LOCK_TIMEOUT, TimeUnit.MILLISECONDS)) {
+            logger.info("before")
+            if (lock.tryLock(TRANSFER_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
                 try {
                     tranWrap.inTransaction {
                         val fromAccount = accountDao.findOrThrow(transfer.fromAccountId)
@@ -56,17 +57,17 @@ open class ThreadLockingTransferService @Inject constructor(
     }
 
     /**
-     * Repeatedly executes the given function [action] until one of the conditions below is met:
-     * - function [action] returned `true`
-     * - function [action] was executed specified number of times [atMostTimes]
-     * - timeout [timeoutMs] has occurred
+     * Repeatedly executes the given function [action] until one of the following conditions is met:
+     *
+     * - function [action] returns `true`
+     * - timeout [timeoutMs] is reached
+     *
+     * @return `true` or `false` whether [action] was successful
      */
-    private fun repeatUntilTrue(atMostTimes: Int, timeoutMs: Long, action: (Int) -> Boolean): Boolean {
+    private fun repeatUntil(timeoutMs: Long, action: () -> Boolean): Boolean {
         val stopTimeMs = System.currentTimeMillis() + timeoutMs
-        for (index in 0 until atMostTimes) {
-            if (action(index) || System.currentTimeMillis() > stopTimeMs) {
-                return true
-            }
+        while (System.currentTimeMillis() < stopTimeMs) {
+            if (action()) return true
         }
         return false
     }
