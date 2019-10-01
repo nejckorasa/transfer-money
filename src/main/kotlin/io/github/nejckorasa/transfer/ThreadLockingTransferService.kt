@@ -33,7 +33,6 @@ open class ThreadLockingTransferService @Inject constructor(
 
     private fun executeTransfer(transfer: Transfer): Boolean {
         try {
-            logger.info("before")
             if (lock.tryLock(TRANSFER_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
                 try {
                     tranWrap.inTransaction {
