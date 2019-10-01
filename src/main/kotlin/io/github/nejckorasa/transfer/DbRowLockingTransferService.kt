@@ -3,7 +3,7 @@ package io.github.nejckorasa.transfer
 import com.google.inject.Inject
 import io.github.nejckorasa.account.AccountDao
 import io.github.nejckorasa.dao.TransactionWrapper
-import io.github.nejckorasa.transfer.TransferStatus.COMPLETED
+import io.github.nejckorasa.transfer.TransferStatus.SUCCESS
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -23,6 +23,6 @@ open class DbRowLockingTransferService @Inject constructor(
             accountDao.transfer(fromAccount, toAccount, transfer.amount)
         }
         logger.info("Completed transfer: ${transfer.id}")
-        return createOrUpdate(transfer.apply { status = COMPLETED })
+        return createOrUpdate(transfer.apply { status = SUCCESS })
     }
 }

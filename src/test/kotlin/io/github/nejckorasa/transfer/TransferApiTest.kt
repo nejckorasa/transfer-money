@@ -37,7 +37,7 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(accounts[0].id!!, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertEquals(TransferStatus.COMPLETED, status)
+            assertEquals(TransferStatus.SUCCESS, status)
             assertEquals(0, BigDecimal(50).compareTo(amount))
             assertNotNull(created)
         }
@@ -61,14 +61,14 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(accounts[0].id!!, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertEquals(TransferStatus.COMPLETED, status)
+            assertEquals(TransferStatus.SUCCESS, status)
             assertEquals(0, BigDecimal(10).compareTo(amount))
             assertNotNull(created)
         }
         transfers[1].apply {
             assertEquals(accounts[0].id!!, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertEquals(TransferStatus.COMPLETED, status)
+            assertEquals(TransferStatus.SUCCESS, status)
             assertEquals(0, BigDecimal(20).compareTo(amount))
             assertNotNull(created)
         }
@@ -99,7 +99,7 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(accounts[0].id!!, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertNotEquals(TransferStatus.COMPLETED, status)
+            assertNotEquals(TransferStatus.SUCCESS, status)
             assertEquals(0, BigDecimal(50).compareTo(amount))
             assertNotNull(created)
         }
@@ -128,7 +128,7 @@ class TransferApiTest : BaseFunctionalTest() {
         transfers[0].apply {
             assertEquals(999, fromAccountId)
             assertEquals(accounts[1].id!!, toAccountId)
-            assertNotEquals(TransferStatus.COMPLETED, status)
+            assertNotEquals(TransferStatus.SUCCESS, status)
             assertEquals(0, BigDecimal(50).compareTo(amount))
             assertNotNull(created)
         }

@@ -102,7 +102,7 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
       "toAccountId": 2,
       "amount": 50.00,
       "created": "2019-09-30T20:57:02.15",
-      "status": "NEW"
+      "status": "SUCCESS"
     },
     {
       "id": 2,
@@ -118,7 +118,7 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
       "toAccountId": 2,
       "amount": 50.00,
       "created": "2019-09-30T20:57:05.397",
-      "status": "PENDING"
+      "status": "NEW"
     }
   ]
   ```
@@ -147,6 +147,6 @@ java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
     "toAccountId": 2,
     "amount": 50.00,
     "created": "2019-09-30T20:57:02.15",
-    "status": "NEW"
+    "status": "SUCCESS"
   }
   ```

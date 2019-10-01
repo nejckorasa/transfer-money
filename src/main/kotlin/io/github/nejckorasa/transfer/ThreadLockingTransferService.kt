@@ -3,7 +3,7 @@ package io.github.nejckorasa.transfer
 import com.google.inject.Inject
 import io.github.nejckorasa.account.AccountDao
 import io.github.nejckorasa.dao.TransactionWrapper
-import io.github.nejckorasa.transfer.TransferStatus.COMPLETED
+import io.github.nejckorasa.transfer.TransferStatus.SUCCESS
 import io.github.nejckorasa.transfer.TransferStatus.FAILED
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,7 +28,7 @@ open class ThreadLockingTransferService @Inject constructor(
         val transferSuccess = repeatUntil(timeoutMs = TRANSFER_REQUEST_TIMEOUT_MS) {
             executeTransfer(transfer)
         }
-        return createOrUpdate(transfer.apply { status = if (transferSuccess) COMPLETED else FAILED })
+        return createOrUpdate(transfer.apply { status = if (transferSuccess) SUCCESS else FAILED })
     }
 
     private fun executeTransfer(transfer: Transfer): Boolean {
