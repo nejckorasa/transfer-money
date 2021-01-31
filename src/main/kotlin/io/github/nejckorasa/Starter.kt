@@ -10,7 +10,7 @@ import io.github.nejckorasa.transfer.TransferService
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import org.eclipse.jetty.http.HttpStatus.CREATED_201
-import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
 
 class Starter @Inject constructor(
     private val accountService: AccountService,
@@ -26,20 +26,20 @@ class Starter @Inject constructor(
         path("api") {
             path("accounts") {
                 get { ctx ->
-                    ctx.json(accountService.findAll().map { AccountResponse.fromAccount(it) })
+                    ctx.json(accountService.findAll().map { AccountResponse.sourceAccount(it) })
                 }
                 get(":accountId") { ctx ->
                     val accountId = ctx.pathParam("accountId").toLong()
                     val account = accountService.find(accountId)
-                    ctx.json(AccountResponse.fromAccount(account))
+                    ctx.json(AccountResponse.sourceAccount(account))
                 }
                 post { ctx ->
                     val createAccountRequest = ctx.bodyValidator<CreateAccountRequest>()
-                        .check({ it.balance >= BigDecimal.ZERO }, "Account balance must be positive")
+                        .check({ it.balance >= ZERO }, "Account balance must be positive")
                         .get()
 
                     val account = accountService.create(createAccountRequest)
-                    ctx.json(AccountResponse.fromAccount(account))
+                    ctx.json(AccountResponse.sourceAccount(account))
                     ctx.status(CREATED_201)
                 }
             }
@@ -50,12 +50,11 @@ class Starter @Inject constructor(
                 }
                 post { ctx ->
                     val transferRequest = ctx.bodyValidator<TransferRequest>()
-                        .check({ it.amount >= BigDecimal.ZERO }, "Transfer amount must be positive")
-                        .check({ it.fromAccountId > 0 }, "From account id must be positive")
-                        .check({ it.toAccountId > 0 }, "To account id must be positive")
+                        .check({ it.amount > ZERO }, "Transfer amount must be greater than 0")
+                        .check({ it.sourceAccountId != it.destinationAccountId }, "Source and destination account must be different")
                         .get()
 
-                    val transfer = transferService.executeTransfer(transferRequest)
+                    val transfer = transferService.makeTransfer(transferRequest)
                     ctx.status(CREATED_201)
                     ctx.json(TransferResponse.fromTransfer(transfer))
                 }

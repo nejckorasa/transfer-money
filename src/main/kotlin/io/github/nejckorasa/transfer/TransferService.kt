@@ -4,7 +4,7 @@ import com.google.inject.persist.Transactional
 
 abstract class TransferService(private val transferDao: TransferDao) {
 
-    abstract fun executeTransfer(transferRequest: TransferRequest): Transfer
+    abstract fun makeTransfer(transferRequest: TransferRequest): Transfer
 
     fun findAll(): List<Transfer> = transferDao.findAll()
 

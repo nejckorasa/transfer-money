@@ -7,7 +7,7 @@ import com.google.inject.persist.jpa.JpaPersistModule
 import io.github.nejckorasa.account.AccountDao
 import io.github.nejckorasa.account.AccountService
 import io.github.nejckorasa.dao.TransactionWrapper
-import io.github.nejckorasa.transfer.ThreadLockingTransferService
+import io.github.nejckorasa.transfer.DbLockingTransferService
 import io.github.nejckorasa.transfer.TransferDao
 import io.github.nejckorasa.transfer.TransferService
 
@@ -26,6 +26,6 @@ class TransferMoneyModule : AbstractModule() {
         bind(AccountDao::class.java).asEagerSingleton()
         bind(AccountService::class.java).asEagerSingleton()
         bind(TransferDao::class.java).asEagerSingleton()
-        bind(TransferService::class.java).to(ThreadLockingTransferService::class.java)
+        bind(TransferService::class.java).to(DbLockingTransferService::class.java)
     }
 }

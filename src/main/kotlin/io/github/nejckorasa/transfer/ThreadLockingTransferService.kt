@@ -3,11 +3,11 @@ package io.github.nejckorasa.transfer
 import com.google.inject.Inject
 import io.github.nejckorasa.account.AccountDao
 import io.github.nejckorasa.dao.TransactionWrapper
-import io.github.nejckorasa.transfer.TransferStatus.SUCCESS
 import io.github.nejckorasa.transfer.TransferStatus.FAILED
+import io.github.nejckorasa.transfer.TransferStatus.SUCCESS
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.locks.ReentrantLock
 
 private const val TRANSFER_LOCK_TIMEOUT_MS = 100L
@@ -23,22 +23,22 @@ open class ThreadLockingTransferService @Inject constructor(
 
     private val lock = ReentrantLock()
 
-    override fun executeTransfer(transferRequest: TransferRequest): Transfer {
+    override fun makeTransfer(transferRequest: TransferRequest): Transfer {
         val transfer = createOrUpdate(transferRequest.toTransfer())
         val transferSuccess = repeatUntil(timeoutMs = TRANSFER_REQUEST_TIMEOUT_MS) {
-            executeTransfer(transfer)
+            makeTransferSynchronously(transfer)
         }
         return createOrUpdate(transfer.apply { status = if (transferSuccess) SUCCESS else FAILED })
     }
 
-    private fun executeTransfer(transfer: Transfer): Boolean {
+    private fun makeTransferSynchronously(transfer: Transfer): Boolean {
         try {
-            if (lock.tryLock(TRANSFER_LOCK_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+            if (lock.tryLock(TRANSFER_LOCK_TIMEOUT_MS, MILLISECONDS)) {
                 try {
                     tranWrap.inTransaction {
-                        val fromAccount = accountDao.findOrThrow(transfer.fromAccountId)
-                        val toAccount = accountDao.findOrThrow(transfer.toAccountId)
-                        accountDao.transfer(fromAccount, toAccount, transfer.amount)
+                        val sourceAccount = accountDao.findOrThrow(transfer.sourceAccountId)
+                        val destinationAccount = accountDao.findOrThrow(transfer.destinationAccountId)
+                        accountDao.makeTransfer(sourceAccount, destinationAccount, transfer.amount)
                         logger.info("Completed transfer: ${transfer.id}")
                     }
                     return true

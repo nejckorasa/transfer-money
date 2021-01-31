@@ -2,20 +2,13 @@
 
 [![Build Status](https://travis-ci.com/nejckorasa/transfer-money.svg?token=pfWZRfNyzeRf4kWWpnbs&branch=master)](https://travis-ci.com/nejckorasa/transfer-money)
 
-Sample app for money transfers between accounts
+Sample app for money transfers between accounts. It supports account creation with initial balance and issuing money transfers between accounts. 
 
-It supports account creation with initial balance and issuing money transfers between accounts. 
+It is build using [Javalin](https://javalin.io/) with [Guice](https://github.com/google/guice) and [Kotlin](https://kotlinlang.org). [Hibernate](https://hibernate.org/orm/) with [H2](https://www.h2database.com/html/main.html) in-memory database.
 
-It is build using:
+Tested with [JUnit5](https://junit.org/junit5/) and [REST-assured](http://rest-assured.io/)
 
-- [Javalin](https://javalin.io/) web framework with [Guice](https://github.com/google/guice) and [Kotlin](https://kotlinlang.org)
-- [Hibernate](https://hibernate.org/orm/) with [H2](https://www.h2database.com/html/main.html) in memory database
-
-And tested with:
-
-- [JUnit5](https://junit.org/junit5/)
-- [REST-assured](http://rest-assured.io/)
-
+It includes examples for both [DB locking](src/main/kotlin/io/github/nejckorasa/transfer/DbLockingTransferService.kt) and [Thread locking](src/main/kotlin/io/github/nejckorasa/transfer/ThreadLockingTransferService.kt).
 
 ## Running
 
@@ -23,130 +16,121 @@ Server starts on: `http://localhost:7000`
 
 To start the server:
 
-```sh
-mvn compile exec:java
+```bash
+./mvnw compile exec:java
 ```
 
 Or build jar and run it:
 
-```sh
-mvn package
-
-java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
+```bash
+./mvnw package && java -jar target/transfer-money-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ## REST API
+<details>
+  <summary>Click to expand!</summary>
 
 ### Accounts
 
-- `GET /api/accounts`: get all accounts
-
-  Successful response: `200`
-  
+- `GET /api/accounts`  
+  Get all accounts  
+  Successful response: `200`  
   Example response:
   ```json
   [
     {
-      "id": 1,
+      "accountId": 1,
       "balance": 200.00
     },
     {
-      "id": 2,
+      "accountId": 2,
       "balance": 100.00
     }
   ]
   ```
-- `GET /api/accounts/:id`: get account by id
-
-  Successful response: `200`
   
+- `GET /api/accounts/:id`  
+  get account by id  
+  Successful response: `200`  
   Example response:
   ```json
   {
-    "id": 1,
+    "accountId": 1,
     "balance": 200.00
   }
   ```
-- `POST /api/accounts`: create account
-
+- `POST /api/accounts`  
+  Create account  
   Request body:
-
   ```json
   {
     "balance": 200.00
   }
   ```
-  
-  Successful response: `201`
-
+  Successful response: `201`  
   Example response:
   ```json
   {
-    "id": 1,
+    "accountId": 1,
     "balance": 200.00
   }
   ```
   
 ### Transfers
 
-- `GET /api/transfers`: get all transfers
-
-  Successful response: `200`
-  
+- `GET /api/transfers`  
+  Get all transfers  
+  Successful response: `200`  
   Example response:
   ```json
   [
     {
-      "id": 1,
-      "fromAccountId": 1,
-      "toAccountId": 2,
+      "transferId": 1,
+      "sourceAccountId": 1,
+      "destinationAccountId": 2,
       "amount": 50.00,
-      "created": "2019-09-30T20:57:02.15",
+      "createdAt": "2019-09-30T20:57:02.15",
       "status": "SUCCESS"
     },
     {
-      "id": 2,
-      "fromAccountId": 1,
-      "toAccountId": 2,
+      "transferId": 2,
+      "sourceAccountId": 1,
+      "destinationAccountId": 2,
       "amount": 50.00,
-      "created": "2019-09-30T20:57:03.102",
+      "createdAt": "2019-09-30T20:57:03.102",
       "status": "FAILED"
     },
     {
-      "id": 3,
-      "fromAccountId": 1,
-      "toAccountId": 2,
+      "transferId": 3,
+      "sourceAccountId": 1,
+      "destinationAccountId": 2,
       "amount": 50.00,
-      "created": "2019-09-30T20:57:05.397",
-      "status": "NEW"
+      "createdAt": "2019-09-30T20:57:05.397",
+      "status": "REQUESTED"
     }
   ]
   ```
 
-- `POST /api/transfers`: create transfer
-
-  Description: Transfer provided amount from one account to another
-
+- `POST /api/transfers`  
+  Create transfer    
   Request body:
-
   ```json
   {
-    "fromAccountId": 1,
-    "toAccountId": 2,
+    "sourceAccountId": 1,
+    "destinationAccountId": 2,
     "amount": 50.0
   }
   ```
-  
-  Successful response: `201`
-  
+  Successful response: `201`  
   Example response:
   ```json
   {
-    "id": 1,
-    "fromAccountId": 1,
-    "toAccountId": 2,
+    "transferId": 1,
+    "sourceAccountId": 1,
+    "destinationAccountId": 2,
     "amount": 50.00,
-    "created": "2019-09-30T20:57:02.15",
+    "createdAt": "2019-09-30T20:57:02.15",
     "status": "SUCCESS"
   }
   ```
+</details>

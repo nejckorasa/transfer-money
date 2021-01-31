@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.EnumType.STRING
 
 @Entity
 @Table(name = "transfers")
@@ -16,19 +17,20 @@ data class Transfer(
 
     @Column
     @CreationTimestamp
-    val created: LocalDateTime? = null,
+    val createdAt: LocalDateTime? = null,
 
     @Column
-    val fromAccountId: Long,
+    val sourceAccountId: Long,
 
     @Column
-    val toAccountId: Long,
+    val destinationAccountId: Long,
 
     @Column
     val amount: BigDecimal,
 
     @Column
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     var status: TransferStatus
-
-)
+) {
+    fun getAccounts() = listOf(sourceAccountId, destinationAccountId)
+}

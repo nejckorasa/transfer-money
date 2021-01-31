@@ -1,6 +1,7 @@
 package io.github.nejckorasa.account
 
 import java.math.BigDecimal
+import java.math.BigDecimal.ZERO
 import javax.persistence.*
 
 @Entity
@@ -15,12 +16,9 @@ data class Account(
     @Column
     var balance: BigDecimal
 ) {
-    fun deposit(amount: BigDecimal) {
-        this.balance += amount
-    }
-
-    fun withdraw(amount: BigDecimal) {
-        if (balance < amount) throw InsufficientBalanceException(accountId = id!!)
-        this.balance -= amount
+    fun adjustBalance(amount: BigDecimal) {
+        val newBalance = balance + amount
+        if (newBalance < ZERO) throw InsufficientBalanceException(accountId = id!!)
+        this.balance = newBalance
     }
 }

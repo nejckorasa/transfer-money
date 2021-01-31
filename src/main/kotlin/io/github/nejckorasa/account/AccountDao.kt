@@ -33,9 +33,9 @@ open class AccountDao @Inject constructor(emProvider: Provider<EntityManager>) :
         return em().merge(account)
     }
 
-    fun transfer(from: Account, to: Account, amount: BigDecimal) {
-        createOrUpdate(from.apply { withdraw(amount) })
-        createOrUpdate(to.apply { deposit(amount) })
+    fun makeTransfer(sourceAccount: Account, destinationAccount: Account, amount: BigDecimal) {
+        createOrUpdate(sourceAccount.apply { adjustBalance(amount.negate()) })
+        createOrUpdate(destinationAccount.apply { adjustBalance(amount) })
     }
 
     private fun queryAccount(accountId: Long): TypedQuery<Account> = em()

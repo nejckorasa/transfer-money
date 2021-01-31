@@ -2,7 +2,6 @@ package io.github.nejckorasa.account
 
 import com.google.inject.Inject
 import com.google.inject.persist.Transactional
-import java.math.BigDecimal
 
 open class AccountService @Inject constructor(private val accountDao: AccountDao) {
 
@@ -12,9 +11,5 @@ open class AccountService @Inject constructor(private val accountDao: AccountDao
 
     @Transactional
     open fun create(createAccountRequest: CreateAccountRequest): Account =
-        accountDao.createOrUpdate(createAccountRequest.toAccount())
-
-    @Transactional
-    open fun transfer(from: Account, to: Account, amount: BigDecimal) =
-        accountDao.transfer(from, to, amount)
+        accountDao.createOrUpdate(createAccountRequest.destinationAccount())
 }

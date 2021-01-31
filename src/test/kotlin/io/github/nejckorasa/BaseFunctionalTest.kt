@@ -11,8 +11,11 @@ import io.restassured.RestAssured
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import javax.persistence.EntityManager
 
+@TestInstance(PER_CLASS)
 open class BaseFunctionalTest(private val port: Int = 7000) {
 
     private lateinit var injector: Injector
