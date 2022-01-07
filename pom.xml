@@ -17,7 +17,7 @@
         <javalin.version>3.13.3</javalin.version>
         <guice.version>4.2.3</guice.version>
         <rest-assured.version>4.3.3</rest-assured.version>
-        <h2.version>1.4.200</h2.version>
+        <h2.version>2.0.206</h2.version>
         <hibernate.version>5.4.27.Final</hibernate.version>
         <junit.version>5.7.0</junit.version>
         <jackson.version>2.12.1</jackson.version>
