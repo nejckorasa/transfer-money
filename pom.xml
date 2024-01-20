@@ -20,7 +20,7 @@
         <h2.version>2.1.210</h2.version>
         <hibernate.version>5.4.27.Final</hibernate.version>
         <junit.version>5.7.0</junit.version>
-        <jackson.version>2.12.1</jackson.version>
+        <jackson.version>2.12.7.1</jackson.version>
     </properties>
 
     <dependencies>
